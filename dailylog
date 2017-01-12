@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.4/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.4/themes/icon.css">
+    <script type="text/javascript" src="jquery-easyui-1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.4/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.4/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body style="padding:0px;margin:0px">
+<table id="dg" style="width:100%;"></table>
+
+<div id="toolbar">
+    <form id='s_form'>
+        服务器:<input id='zone' name='zone' class="easyui-numberbox" size='10'>
+        玩家ID:<input id='uid' name='uid' class='easyui-textbox' size='20'>
+        <td>从:</td>
+        <td><input  class="easyui-datetimebox" name="from" ></td>
+        <td>到:</td>
+        <td><input  class="easyui-datetimebox" name="to" ></td>
+        <td>渠道
+            <select id="qudao" name="qudao">
+                <option value="">请选择</option>
+                <option value="qudao1">渠道1</option>
+                <option value="qudao2">渠道2</option>
+                <option value="qudao3">渠道3</option>
+            </select>
+        </td>
+        <td>事件
+            <select id="event" name="event">
+                <option value="">请选择</option>
+                <option value="event1">事件1</option>
+                <option value="event2">事件2</option>
+                <option value="event3">事件3</option>
+            </select>
+        </td>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="datagrid_load('c_currency.php?action=search')">查询</a>
+        <!--<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="putcsv('c_currency.php?action=putcsv')">导出</a>-->
+    </form>
+</div>
+
+<script type="text/javascript">
+    datagrid_load();
+    function datagrid_load(url)
+    {
+        $('#dg').datagrid({
+            title : '',
+            url : url,
+            rownumbers : true,
+            singleSelect: true,
+            collapsible : true,
+            pagination : true,
+            method : 'post',
+            toolbar: '#toolbar',
+            pageSize: 20,         //初始化页面大小
+            queryParams: {zone:$('#zone').val(),uid:$('#uid').val(),from:$("input[name='from']").val(),to:$("input[name='to']").val(),qudao:$('#qudao').val(),event:$('#event').val()},
+            columns:[[
+                {field:'createtime',title:'时间',width:100,halign:'center',align:'center'},
+                {field:'uid',title:'玩家id',width:100,halign:'center',align:'center'},
+                {field:'pl',title:'渠道',width:100,halign:'center',align:'center'},
+                {field:'zone',title:'区服',width:100,halign:'center',align:'center'},
+                {field:'zone',title:'角色名',width:100,halign:'center',align:'center'},
+                {field:'opt',title:'获取or消耗',width:100,halign:'center',align:'center'},
+                {field:'num',title:'元宝数',width:100,halign:'center',align:'center',sortable:true},
+                {field:'typeid',title:'类型',width:100,halign:'center',align:'center',sortable:true},
+                {field:'eventid',title:'事件类型',width:100,halign:'center',align:'center',sortable:true},
+                {field:'eventname',title:'事件名称',width:100,halign:'center',align:'center',sortable:true}
+            ]]
+        });
+    }
+</script>
+</body>
+</html>
+*************************************************************************************************************************************
+在获取日历中的取值方式：
+$('#from').val();不能获取
+$("input[name='from']").val();可获取
+$('#from').datetimebox('getValue');可以获取值 但是会影响到datagrid_load（）初始化列表样式
+
+
+选用 $("input[name='from']").val();则不会影响列表样式
